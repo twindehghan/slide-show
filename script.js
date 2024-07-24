@@ -1,24 +1,29 @@
 let slideIndex = 0;
-showSlides();
+let slideInterval;
 
 function changeSlide(n) {
-    showSlides(slideIndex += n);
+    clearInterval(slideInterval);
+    slideIndex += n;
+    if (slideIndex >= document.getElementsByClassName("slide").length) {
+        slideIndex = 0;
+    }
+    if (slideIndex < 0) {
+        slideIndex = document.getElementsByClassName("slide").length - 1;
+    }
+    showSlides();
+    slideInterval = setInterval(() => changeSlide(1), 6000); // Change image every 6 seconds
 }
 
 function currentSlide(n) {
-    showSlides(slideIndex = n - 1);
+    clearInterval(slideInterval);
+    slideIndex = n - 1;
+    showSlides();
+    slideInterval = setInterval(() => changeSlide(1), 6000); // Change image every 6 seconds
 }
 
 function showSlides() {
     let slides = document.getElementsByClassName("slide");
     let dots = document.getElementsByClassName("dot");
-
-    if (slideIndex >= slides.length) {
-        slideIndex = 0;
-    }
-    if (slideIndex < 0) {
-        slideIndex = slides.length - 1;
-    }
 
     for (let i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
@@ -30,7 +35,10 @@ function showSlides() {
 
     slides[slideIndex].style.display = "block";
     dots[slideIndex].className += " active";
-    slideIndex++;
-    
-    setTimeout(showSlides, 3000); // Change image every 3 seconds
 }
+
+// Initialize the slideshow
+document.addEventListener("DOMContentLoaded", () => {
+    showSlides();
+    slideInterval = setInterval(() => changeSlide(1), 6000); // Change image every 6 seconds
+});
